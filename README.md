@@ -29,8 +29,8 @@ Stmt -> ;
 
 Expr -> null
 Expr -> new <ClassName> ( <Actuals>? )
-Expr -> <Var> -> <MethodName> ( <Actuals>? )
-Expr -> <Var> -> <Var>
+Expr -> <Var> . <MethodName> ( <Actuals>? )
+Expr -> <Var> . <Var>
 Expr -> <Expr> ? <Expr> : <Expr>
 Expr -> <Expr> <BinOp> <Expr>
 Expr -> <UnOp> <Expr>
@@ -67,6 +67,7 @@ Identifier -> [a-zA-Z][a-zA-Z0-9_]*
 notes:
 - only 1 allowed global main function in all files
 - there must be a global main function outside any encapsulation no exceptions
+- don't allow deref of pointers using -> instead it needs to be deref by (*ptr)
 
 
 heavy:
