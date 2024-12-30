@@ -4,8 +4,10 @@
 #include <vector>
 
 #include "../../include/lexer/Lexer.h"
+#include "../../include/printer/Printer.h"
 
-Lexer::Lexer(std::vector<Token>* tokens, std::string src) : tokens(tokens), srcFile(src) {
+Lexer::Lexer(std::vector<Token>* tokens, std::string src, Printer* p) 
+  : tokens(tokens), srcFile(src), printer(p) {
   fileStream.open(src);
   if (!fileStream) {
     throw std::runtime_error("Could not open file: " + src);
@@ -57,8 +59,7 @@ Token Lexer::getNextToken() {
           }
         }
         if (c == '_') {
-          // report error
-          std::cerr << "error wrong multi line comment" << std::endl;
+          printer->print("Missing closing */ for comment", lineNum, colNum);
         }
         continue;
       }
@@ -66,8 +67,7 @@ Token Lexer::getNextToken() {
         while (Lexer::getNextChar(c) && c != '\n') {}
         continue;
       } else {
-        // report error
-        std::cerr << "error wrong comment" << std::endl;
+        printer->print("Expected start of comment", lineNum, colNum);
       }
     }    
 

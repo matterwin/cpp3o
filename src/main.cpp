@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../include/lexer/Lexer.h"
+#include "../include/printer/Printer.h"
 
 int main(int argc, char** argv) {
   if (argc < 2) {
@@ -14,7 +15,8 @@ int main(int argc, char** argv) {
   std::string srcFile = argv[1];
 
   std::vector<Token>* tokens = new std::vector<Token>();
-  Lexer* lexer = new Lexer(tokens, srcFile);
+  Printer* p = new Printer(srcFile);
+  Lexer* lexer = new Lexer(tokens, srcFile, p);
 
   // Lexical Analysis (Scanning)
   if (lexer->lex() < 0) {
