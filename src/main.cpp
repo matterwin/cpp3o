@@ -31,6 +31,8 @@ int main(int argc, char** argv) {
       << ", Column: " << t.column
       << std::endl;
   }
+
+  // delete token vector after parser, we need to delete the tokens while parsing
   delete tokens;
 
   // Syntacial Analysis (Parsing)

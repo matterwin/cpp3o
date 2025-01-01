@@ -9,7 +9,7 @@ enum TokenType {
   INTEGER,
   STRING,
   COMMENT,
-  OPERATOR,
+  SYMBOL,
   END_OF_FILE
 };
 

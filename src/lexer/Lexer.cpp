@@ -38,12 +38,12 @@ int Lexer::lex() {
 Token* Lexer::getNextToken() {
   char c;
   while ((c = Lexer::getNextChar()) != EOF) {
-    // Whitespace
+    // whitespace
     if (std::isspace(c)) {
       continue;
     }
 
-    // Comment
+    // comment
     else if (c == '/') {
       // multi-line comment
       if ((c = Lexer::getNextChar()) == '*') {
@@ -107,21 +107,50 @@ Token* Lexer::getNextToken() {
       return new Token(TokenType::STRING, value, lineNum, startColNum);
     }
 
-    // WORD [a-zA-z_]
+    // WORD [a-zA-Z][a-zA-Z0-9_]*
     else if (isalpha(c)) {
       int startColNum = colNum;
       std::string value = "";
+      value.push_back(c);
+
+      while ((c = Lexer::getNextChar()) != EOF && !isspace(c)) {
+        // only _ non alphanumeric chars is allowed for WORD
+        if (!isalpha(c) && !isdigit(c) && c != '_') {
+          printer->print("Invalid identifer/word", lineNum, colNum);
+          return nullptr;
+        }
+        value.push_back(c);
+      }
 
       return new Token(TokenType::WORD, value, lineNum, startColNum);
     }
 
     // character 
-    else if (c == '\'') {}
+    else if (c == '\'') {
+      int startColNum = colNum;
+      std::string value = "";
 
-    // operator
-    else if (c == '*') {}
+      if ((c = Lexer::getNextChar()) == EOF) {
+        printer->print("Invalid character", lineNum, startColNum);
+        return nullptr;
+      } 
+      value.push_back(c);
+      if ((c = Lexer::getNextChar()) != '\'') {
+        printer->print("Invalid character", lineNum, startColNum);
+        return nullptr;
+      }
 
-    return new Token(TokenType::WORD, std::string(1, c), lineNum, colNum);
+      return new Token(TokenType::CHARACTER, value, lineNum, startColNum);
+    }
+
+    // symbol
+    else if (!isdigit(c) && !isspace(c)) {
+      int startColNum = colNum;
+      std::string value = "";
+      value.push_back(c);
+      // push off symbol checking to parser
+      return new Token(TokenType::SYMBOL, value, lineNum, startColNum);
+    }
   }
   return new Token(TokenType::END_OF_FILE, "EOF", lineNum, colNum);
 }
@@ -130,7 +159,7 @@ char Lexer::getNextChar() {
   char c = fileStream.get();
   if (c == '\n') {
     lineNum++;
-    colNum = 1;
+    colNum = 0;
   } else {
     colNum++;
   }
@@ -143,10 +172,7 @@ void Lexer::consumeToken() {
 
 char Lexer::peekAtNextChar() {
   int nextChar = fileStream.peek();
-  if (nextChar == EOF) {
-    return '_';
-  }
-  return static_cast<char>(nextChar);
+  return nextChar;
 }
 
 
