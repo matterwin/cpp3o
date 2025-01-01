@@ -20,69 +20,121 @@ Lexer::~Lexer() {
   }
 }
 
+// 0 on success, -1 on error
 int Lexer::lex() {
   std::cout << "Start of lexical process ..." << std::endl;
 
-  Token token = Lexer::getNextToken();
-  while (token.type != END_OF_FILE) {
-    tokens->push_back(token);
+  Token* token = Lexer::getNextToken();
+  while (token->type != END_OF_FILE) {
+    tokens->push_back(*token);
     token = Lexer::getNextToken();
+    if (!token) return -1;
   }
-  tokens->push_back(token);
+  tokens->push_back(*token);
    
   return 0;
 }
 
-// When c == '_' it means we're at EOF
-Token Lexer::getNextToken() {
+Token* Lexer::getNextToken() {
   char c;
-  while (Lexer::getNextChar(c)) {
+  while ((c = Lexer::getNextChar()) != EOF) {
     // Whitespace
     if (std::isspace(c)) {
-      if (c == '\n') {
-        lineNum++;
-        colNum = 1;
-      }
       continue;
     }
 
     // Comment
     else if (c == '/') {
-      //TODO make a value for error printing, we print the value of comment on error for scanning
-      std::string value = "";
-      if (Lexer::getNextChar(c) && c == '*') {
-        while (Lexer::getNextChar(c)) {
+      // multi-line comment
+      if ((c = Lexer::getNextChar()) == '*') {
+        while ((c = Lexer::getNextChar()) != EOF) {
           if (c == '*') {
-            if (Lexer::getNextChar(c) && c == '/') {
+            if ((c = Lexer::getNextChar()) == '/') {
               break;
             }
           }
         }
-        if (c == '_') {
+        if (c == EOF) {
           printer->print("Missing closing */ for comment", lineNum, colNum);
+          return nullptr;
         }
         continue;
       }
+      // single-line comment
       else if (c == '/') {
-        while (Lexer::getNextChar(c) && c != '\n') {}
+        while ((c = Lexer::getNextChar()) != '\n') {}
         continue;
       } else {
-        printer->print("Expected start of comment", lineNum, colNum);
+        printer->print("Invalid comment", lineNum, colNum);
+        return nullptr;
       }
     }    
 
-    return Token(TokenType::WORD, std::string(1, c), lineNum, colNum);
+    // integer
+    else if (isdigit(c)) {
+      int startColNum = colNum;
+      std::string value = "";
+      value.push_back(c);
+
+      while ((c = Lexer::getNextChar()) != EOF && isdigit(c)) {
+        value.push_back(c);
+      }
+
+      if (c != EOF && !isspace(c) && !isdigit(c)) {
+        printer->print("Invalid integer", lineNum, colNum);
+        return nullptr;
+      }
+
+      return new Token(TokenType::INTEGER, value, lineNum, startColNum);
+    }
+
+    // string
+    else if (c == '"') {
+      int startColNum = colNum;
+      std::string value = "";
+
+      while ((c = Lexer::getNextChar()) != '"' && c != EOF) {
+        value.push_back(c);
+      }
+      if (c == EOF) {
+        printer->print("Missing closing \" for string", lineNum, colNum);
+        return nullptr;
+      } 
+
+      // consume closing "
+      Lexer::consumeToken();
+
+      return new Token(TokenType::STRING, value, lineNum, startColNum);
+    }
+
+    // WORD [a-zA-z_]
+    else if (isalpha(c)) {
+      int startColNum = colNum;
+      std::string value = "";
+
+      return new Token(TokenType::WORD, value, lineNum, startColNum);
+    }
+
+    // character 
+    else if (c == '\'') {}
+
+    // operator
+    else if (c == '*') {}
+
+    return new Token(TokenType::WORD, std::string(1, c), lineNum, colNum);
   }
-  return Token(TokenType::END_OF_FILE, "EOF", lineNum, colNum);
+  return new Token(TokenType::END_OF_FILE, "EOF", lineNum, colNum);
 }
 
-bool Lexer::getNextChar(char& c) {
-  if (fileStream.get(c)) {
+char Lexer::getNextChar() {
+  char c = fileStream.get();
+  if (c == '\n') {
+    lineNum++;
+    colNum = 1;
+  } else {
     colNum++;
-    return true;
   }
-  c = '_';
-  return false;
+  return c; 
 }
 
 void Lexer::consumeToken() {

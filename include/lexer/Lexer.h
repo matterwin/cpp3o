@@ -20,8 +20,8 @@ public:
   Lexer(std::vector<Token>* tokens, std::string src, Printer* p); 
   ~Lexer();
   int lex();
-  Token getNextToken();
-  bool getNextChar(char& c);
+  Token* getNextToken();
+  char getNextChar();
   void consumeToken();
   char peekAtNextChar();
 };
