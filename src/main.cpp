@@ -7,6 +7,7 @@
 #include "../include/lexer/Lexer.h"
 #include "../include/parser/Parser.h"
 #include "../include/printer/Printer.h"
+#include "../include/absyn/absyn.h"
 
 int main(int argc, char** argv) {
   if (argc < 2) {
@@ -26,8 +27,11 @@ int main(int argc, char** argv) {
   delete lexer;
 
   // delete token vector after parser, we need to delete the tokens while parsing
+  
+  // Syntacial Analysis (Parsing)
+  Program* pgm = new Program("testO");
 
-  Parser* parser = new Parser(tokens, srcFile, p);
+  Parser* parser = new Parser(tokens, srcFile, p, pgm);
 
   if (parser->parse() < 0) {
     return -1;
@@ -35,13 +39,13 @@ int main(int argc, char** argv) {
   delete parser;
   delete tokens;
 
-  // Syntacial Analysis (Parsing)
-  
   // Semantical Analysis (Type Checking)
   
-  // IR 
+  // IR (non llvm, from scratch and no optimization to start)
   
   // Code Gen
 
+  // delete nodes in pgm too
+  delete pgm;
   return 0;
 }

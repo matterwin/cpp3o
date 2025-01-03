@@ -5,14 +5,16 @@
 
 #include "../lexer/Token.h"
 #include "../printer/Printer.h"
+#include "../absyn/absyn.h"
 
 class Parser {
 private:
   std::vector<Token>* tokens;
   std::string srcFile;
   Printer* printer;
+  Program* pgm;
 public:
-  Parser(std::vector<Token>* tokens, std::string src, Printer* p);
+  Parser(std::vector<Token>* tokens, std::string src, Printer* p, Program* pgm);
   int parse();
 };
 

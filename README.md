@@ -2,12 +2,14 @@
 
 # Grammar for cpp3o
 
-ProgramFile -> (<Globals>)*
+Program -> (<File>)*
 
-Globals -> <ClassDecl>
-Globals -> <MethodDecl>
-Globals -> <VarDecl>
-Globals -> <VarDef>
+File -> (<Decl>)*
+
+Decl -> <ClassDecl>
+Decl -> <MethodDecl>
+Decl -> <VarDecl>
+Decl -> <VarDef>
 
 ClassDecl -> class <ClassName> <Block>
 MethodDecl -> <Type> <MethodName> ( <Formals>? ) <Block>
@@ -48,9 +50,6 @@ UnOp -> [++, --, -, !]
 Type -> void | <ClassName> | int | bool | string | null
 
 Literal -> <Num> | <Bool> | <String>
-
-NamespaceDecl -> namespace <Identifier> <Block>
-UsingNamespace -> using namespace <Identifier> ;
 
 ClassName -> <Identifier>
 MethodName -> <Identifier>
