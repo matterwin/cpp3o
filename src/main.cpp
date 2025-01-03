@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../include/lexer/Lexer.h"
+#include "../include/parser/Parser.h"
 #include "../include/printer/Printer.h"
 
 int main(int argc, char** argv) {
@@ -24,20 +25,19 @@ int main(int argc, char** argv) {
   }
   delete lexer;
 
-  for (const auto& t : *tokens) {
-    std::cout << "Type: " << TokenTypeNames[t.type]
-      << ", Value: " << t.value
-      << ", Line: " << t.line
-      << ", Column: " << t.column
-      << std::endl;
-  }
-
   // delete token vector after parser, we need to delete the tokens while parsing
+
+  Parser* parser = new Parser(tokens, srcFile, p);
+
+  if (parser->parse() < 0) {
+    return -1;
+  }
+  delete parser;
   delete tokens;
 
   // Syntacial Analysis (Parsing)
   
-  // Semantical Analysis
+  // Semantical Analysis (Type Checking)
   
   // IR 
   

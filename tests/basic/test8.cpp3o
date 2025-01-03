@@ -1,0 +1,23 @@
+#include <iostream>
+#include <vector>
+
+int main() {
+    // Array
+    int arr[5] = {1, 2, 3, 4, 5};
+    std::cout << "Array elements: ";
+    for(int i = 0; i < 5; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+
+    // Vector
+    std::vector<std::string> fruits = {"Apple", "Banana", "Cherry"};
+    std::cout << "Fruits: ";
+    for(auto fruit : fruits) {
+        std::cout << fruit << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+

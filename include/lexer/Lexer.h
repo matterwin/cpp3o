@@ -24,6 +24,7 @@ public:
   char getNextChar();
   void consumeToken();
   char peekAtNextChar();
+  void putBackChar(char c);
 };
 
 #endif

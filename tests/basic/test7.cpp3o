@@ -1,0 +1,22 @@
+#include <iostream>
+
+int main() {
+    int var = 42;
+    int* ptr = &var;
+    int& ref = var;
+
+    std::cout << "Value of var: " << var << std::endl;
+    std::cout << "Value via pointer: " << *ptr << std::endl;
+    std::cout << "Value via reference: " << ref << std::endl;
+
+    // Modifying via pointer
+    *ptr = 100;
+    std::cout << "Modified var via pointer: " << var << std::endl;
+
+    // Modifying via reference
+    ref = 200;
+    std::cout << "Modified var via reference: " << var << std::endl;
+
+    return 0;
+}
+

@@ -14,7 +14,7 @@ enum TokenType {
 };
 
 const std::string TokenTypeNames[] = {
-  "WORD", "CHARACTER", "INTEGER", "STRING", "COMMENT", "OPERATOR", "END_OF_FILE"
+  "WORD", "CHARACTER", "INTEGER", "STRING", "COMMENT", "SYMBOL", "END_OF_FILE"
 };
 
 struct Token {

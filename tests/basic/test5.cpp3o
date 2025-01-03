@@ -1,0 +1,16 @@
+#include <iostream>
+
+// Function declaration
+int add(int x, int y);
+
+int main() {
+    int sum = add(3, 4);
+    std::cout << "Sum: " << sum << std::endl;
+    return 0;
+}
+
+// Function definition
+int add(int x, int y) {
+    return x + y;
+}
+

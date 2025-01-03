@@ -25,13 +25,21 @@ int Lexer::lex() {
   std::cout << "Start of lexical process ..." << std::endl;
 
   Token* token = Lexer::getNextToken();
-  while (token->type != END_OF_FILE) {
+  while (token && token->type != END_OF_FILE) {
+    // print token
+    std::cout << "Type: " << TokenTypeNames[token->type]
+    << ", Value: " << token->value
+    << ", Line: " << token->line
+    << ", Column: " << token->column
+    << std::endl;
+
     tokens->push_back(*token);
     token = Lexer::getNextToken();
-    if (!token) return -1;
   }
+
+  if (!token) return -1;
+
   tokens->push_back(*token);
-   
   return 0;
 }
 
@@ -79,11 +87,7 @@ Token* Lexer::getNextToken() {
       while ((c = Lexer::getNextChar()) != EOF && isdigit(c)) {
         value.push_back(c);
       }
-
-      if (c != EOF && !isspace(c) && !isdigit(c)) {
-        printer->print("Invalid integer", lineNum, colNum);
-        return nullptr;
-      }
+      Lexer::putBackChar(c);
 
       return new Token(TokenType::INTEGER, value, lineNum, startColNum);
     }
@@ -113,14 +117,15 @@ Token* Lexer::getNextToken() {
       std::string value = "";
       value.push_back(c);
 
-      while ((c = Lexer::getNextChar()) != EOF && !isspace(c)) {
-        // only _ non alphanumeric chars is allowed for WORD
-        if (!isalpha(c) && !isdigit(c) && c != '_') {
-          printer->print("Invalid identifer/word", lineNum, colNum);
-          return nullptr;
+      while ((c = Lexer::getNextChar()) != EOF || isalpha(c) || isdigit(c) || c == '_') {
+        if (isalpha(c) || isdigit(c) || c == '_') {
+          value.push_back(c);
+        } else {
+          break;
         }
-        value.push_back(c);
       }
+
+      Lexer::putBackChar(c);
 
       return new Token(TokenType::WORD, value, lineNum, startColNum);
     }
@@ -173,6 +178,10 @@ void Lexer::consumeToken() {
 char Lexer::peekAtNextChar() {
   int nextChar = fileStream.peek();
   return nextChar;
+}
+
+void Lexer::putBackChar(char c) {
+  fileStream.putback(c);
 }
 
 

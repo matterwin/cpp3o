@@ -1,0 +1,27 @@
+#include <iostream>
+
+int main() {
+    int number = 5;
+
+    // If-else statement
+    if (number > 0) {
+        std::cout << "Positive" << std::endl;
+    } else {
+        std::cout << "Non-positive" << std::endl;
+    }
+
+    // For loop
+    for (int i = 0; i < number; i++) {
+        std::cout << "i = " << i << std::endl;
+    }
+
+    // While loop
+    int j = 0;
+    while (j < number) {
+        std::cout << "j = " << j << std::endl;
+        j++;
+    }
+
+    return 0;
+}
+

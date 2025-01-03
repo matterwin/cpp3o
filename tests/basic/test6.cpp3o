@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+
+class Person {
+public:
+    std::string name;
+    int age;
+
+    // Constructor
+    Person(std::string n, int a) : name(n), age(a) {}
+
+    // Method
+    void introduce() {
+        std::cout << "Hi, I'm " << name << " and I'm " << age << " years old." << std::endl;
+    }
+};
+
+int main() {
+    Person person("Alice", 30);
+    person.introduce();
+    return 0;
+}
+

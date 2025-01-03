@@ -1,0 +1,13 @@
+#include <iostream>
+
+int main() {
+    int a = 10;
+    float b = 20.5f;
+    double c = 30.123;
+    char d = 'D';
+    bool e = true;
+
+    std::cout << a << " " << b << " " << c << " " << d << " " << e << std::endl;
+    return 0;
+}
+
