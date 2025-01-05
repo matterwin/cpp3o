@@ -1,23 +1,22 @@
 # cpp3o
 
-# Grammar for cpp3o
+# Grammar for cpp3o (std and functional cpp focus)
 
 Program -> (<File>)*
 
 File -> (<Decl>)*
 
-Decl -> <ClassDecl>
-Decl -> <MethodDecl>
+Decl -> <FunctionDecl>
 Decl -> <VarDecl>
-Decl -> <VarDef>
 
-ClassDecl -> class <ClassName> <Block>
-MethodDecl -> <Type> <MethodName> ( <Formals>? ) <Block>
+FunctionDecl -> <Type> <FunctionName> ( <Formals>? ) <Block>
+
 VarDecl -> <Type> <Identifier> (, <Identifier>)* ;
 
-Block -> { (<Stmt> | <VarDecl> | <MethodDecl> | <ClassDecl>)* }
+Block -> { (<Stmt> | <Decl>)* }
 
 VarDef -> <Type> <Var> = <Expr> ;
+VarDef -> * <Var> = <Expr> ;
 VarDef -> <Var> = <Expr> ;
 
 Stmt -> <VarDef>
@@ -26,33 +25,32 @@ Stmt -> return <Expr> ;
 Stmt -> if (<Expr>) <Block> (else <Block>)?
 Stmt -> while (<Expr>) <Block>
 Stmt -> break ;
-Stmt -> <Var> ;
 Stmt -> ;
+Stmt -> delete <Var> ;
 
 Expr -> null
-Expr -> new <ClassName> ( <Actuals>? )
-Expr -> <Var> . <MethodName> ( <Actuals>? )
-Expr -> <Var> . <Var>
-Expr -> <Expr> ? <Expr> : <Expr>
+Expr -> new <Type> ( <Actuals>? )
+Expr -> <FunctionName> ( <Actuals>? )
 Expr -> <Expr> <BinOp> <Expr>
 Expr -> <UnOp> <Expr>
 Expr -> <Literal>
 Expr -> <Var>
+Expr -> & <Var> // mem address pointer
+Expr -> * <Var> // deref pointer
+Expr -> ( <Expr> )
 
 Actuals -> <Expr> (, <Expr>)*
 Formals -> <Type> <Identifier> (, <Type> <Identifier>)*
 
-BinOp -> [=, +, -, *, /, %, <, >, <=, >=, ==, !=]
+BinOp -> [=, +, -, *, /, %, <, >, <=, >=, ==, !=, &, &&, |, ||, ^, ~]
 
 UnaryOpStmt -> <UnaryOp> <Var> ; 
-UnOp -> [++, --, -, !]
+UnOp -> [++, --, -, !, &]
 
-Type -> void | <ClassName> | int | bool | string | null
+Type -> void | int | bool | string | null | <Type>*
 
 Literal -> <Num> | <Bool> | <String>
 
-ClassName -> <Identifier>
-MethodName -> <Identifier>
 FunctionName -> <Identifier>
 Var -> <Identifier>
 Num -> (0-9)+ 
@@ -60,13 +58,6 @@ String -> "[^"]*"
 Identifier -> [a-zA-Z][a-zA-Z0-9_]*
 
 
-
-
-
-notes:
-- only 1 allowed global main function in all files
-- there must be a global main function outside any encapsulation no exceptions
-- don't allow deref of pointers using -> instead it needs to be deref by (*ptr)
 
 
 heavy:
@@ -79,6 +70,8 @@ manual memory
 
 
 future
+
+OO
 
 namespace {}
 using namespace <Identifier>
