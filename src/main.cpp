@@ -5,9 +5,9 @@
 #include <vector>
 
 #include "../include/lexer/Lexer.h"
-#include "../include/parser/Parser.h"
+// #include "../include/parser/Parser.h"
 #include "../include/printer/Printer.h"
-#include "../include/absyn/absyn.h"
+#include "../include/absyn/Absyn.h"
 
 int main(int argc, char** argv) {
   if (argc < 2) {
@@ -29,15 +29,15 @@ int main(int argc, char** argv) {
   // delete token vector after parser, we need to delete the tokens while parsing
   
   // Syntacial Analysis (Parsing)
-  Program* pgm = new Program("testO");
+  // Program* pgm = new Program("testO");
 
-  Parser* parser = new Parser(tokens, srcFile, p, pgm);
-
-  if (parser->parse() < 0) {
-    return -1;
-  }
-  delete parser;
-  delete tokens;
+  // Parser* parser = new Parser(tokens, srcFile, p, pgm);
+  //
+  // if (parser->parse() < 0) {
+  //   return -1;
+  // }
+  // delete parser;
+  // delete tokens;
 
   // Semantical Analysis (Type Checking)
   
@@ -46,6 +46,6 @@ int main(int argc, char** argv) {
   // Code Gen
 
   // delete nodes in pgm too
-  delete pgm;
+  // delete pgm;
   return 0;
 }

@@ -5,7 +5,7 @@
 
 #include "../lexer/Token.h"
 #include "../printer/Printer.h"
-#include "../absyn/absyn.h"
+#include "../../include/absyn/Program.h"
 
 class Parser {
 private:
