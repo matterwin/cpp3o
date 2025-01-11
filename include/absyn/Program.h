@@ -1,6 +1,7 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
+#include <iostream>
 #include <string>
 #include <memory>
 #include <vector>
@@ -16,7 +17,10 @@ struct Program : Absyn {
   Program(const std::string& exeName) : Absyn(0, 0), exe(exeName) {}
 
   void print() const override {
-
+    for (auto& f : files) {
+      std::cout << "File: " << f->fileName << std::endl;
+      f->print();
+    }
   }
 };
 
