@@ -9,62 +9,65 @@ File -> (<Decl>)*
 Decl -> <FunctionDecl>
 Decl -> <VarDecl>
 
-FunctionDecl -> <Type> <FunctionName> ( <Formals>? ) <Block>
+FunctionDecl -> <Type> <FunctionName> ( <Parameters>? ) <Block>
 
 VarDecl -> <Type> <Identifier> (, <Identifier>)* ;
-VarDecl -> <Type> * <Identifier> (, <Identifier>)* ;
-VarDecl -> <Type> & <Identifier> (, <Identifier>)* ;
 
-VarDef -> <Type> <Var> = <Expr> ;
-VarDef -> * <Var> = <Expr> ;
-VarDef -> & <Var> = <Expr> ;
-VarDef -> <Var> = <Expr> ;
+VarDef -> <Type> <Identifier> = <Expr> ;
+VarDef -> <Identifier> = <Expr> ;
 
 Block -> { (<Stmt> | <Decl>)* }
 
 Stmt -> <VarDef>
-Stmt -> <UnaryOpStmt> ;
 Stmt -> return <Expr> ;
-Stmt -> if (<Expr>) <Block> (else <Block>)?
-Stmt -> while (<Expr>) <Block>
+Stmt -> if ( <Expr> ) <Block> (else <Block>)?
+Stmt -> while ( <Expr> ) <Block>
+Stmt -> for ( <ForInit>? ; <Expr>? ; <ForUpdate>? ) <Block>
 Stmt -> break ;
 Stmt -> ;
-Stmt -> delete <Var> ;
-Stmt -> <Var> = <Expr> ;
+Stmt -> <Identifier> = <Expr> ;
+
+ForInit -> <VarDef> | <Identifier> = <Expr>
+ForUpdate -> <Expr>
 
 Expr -> null
-Expr -> new <Type> ( <Actuals>? )
-Expr -> <FunctionName> ( <Actuals>? )
-Expr -> <Expr> <BinOp> <Expr>
-Expr -> <UnOp> <Expr>
+Expr -> new <Type> ( <Arguments>? )
+Expr -> <FunctionName> ( <Arguments>? )
+Expr -> <BinOpExpr>
+Expr -> <UnOpExpr>
 Expr -> <Literal>
 Expr -> <Var>
-Expr -> & <Var> // mem address pointer
-Expr -> * <Var> // deref pointer
 Expr -> ( <Expr> )
-Expr -> std:: <Identifer>
+Expr -> std :: <Identifier>
 
-Actuals -> <Expr> (, <Expr>)*
-Formals -> <Type> <Identifier> (, <Type> <Identifier>)*
+BinOpExpr -> <Expr> <BinOp> <Expr>
+
+UnOpExpr -> <UnOp> <Expr>
+           | <Expr> <UnOp>
+
+Arguments -> <Expr> (, <Expr>)*
+
+Parameters -> <Type> <Identifier> (, <Type> <Identifier>)*
 
 BinOp -> [=, +, -, *, /, %, <, >, <=, >=, ==, !=, &, &&, |, ||, ^, ~]
 
-UnaryOpStmt -> <UnaryOp> <Var> ; 
-UnOp -> [++, --, -, !, &]
+UnOp -> [++, --, -, !]
 
-Type -> void | int | bool | string | null | <Type>* | <Type>& 
+Type -> void | int | bool | string | null
 
 Literal -> <NumLiteral> | <BoolLiteral> | <StringLiteral> | <CharLiteral> | <NullLiteral>
 
-NumLiteral -> [+-]?([0-9]+) 
-BoolLiteral -> 0 | (1-9)+
+NumLiteral -> 0 | ([+-])? ([1-9])+
+BoolLiteral -> 0 | ([-])? ([1-9])+
 StringLiteral -> "[^"]*"
 CharLiteral -> '[^']*'
 NullLiteral -> null
 
 FunctionName -> <Identifier>
 Var -> <Identifier>
-Identifier -> [a-zA-Z][a-zA-Z0-9_]*
+Identifier -> [a-zA-Z_][a-zA-Z0-9_]*
+
+
 
 
 
