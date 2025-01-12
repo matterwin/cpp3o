@@ -12,26 +12,22 @@ Decl -> <VarDecl>
 FunctionDecl -> <Type> <FunctionName> ( <Parameters>? ) <Block>
 
 VarDecl -> <Type> <Identifier> (, <Identifier>)* ;
-
-VarDef -> <Type> <Identifier> = <Expr> ;
-VarDef -> <Identifier> = <Expr> ;
+VarDef -> <Type> <Identifier> (= <Expr>)? (, <Identifier> (= <Expr>)?)* ;
 
 Block -> { (<Stmt> | <Decl>)* }
 
-Stmt -> <VarDef>
-Stmt -> return <Expr> ;
+Stmt -> <Decl>
+Stmt -> return (<Expr>)? ;
 Stmt -> if ( <Expr> ) <Block> (else <Block>)?
 Stmt -> while ( <Expr> ) <Block>
 Stmt -> for ( <ForInit>? ; <Expr>? ; <ForUpdate>? ) <Block>
 Stmt -> break ;
 Stmt -> ;
-Stmt -> <Identifier> = <Expr> ;
 
 ForInit -> <VarDef> | <Identifier> = <Expr>
 ForUpdate -> <Expr>
 
 Expr -> null
-Expr -> new <Type> ( <Arguments>? )
 Expr -> <FunctionName> ( <Arguments>? )
 Expr -> <BinOpExpr>
 Expr -> <UnOpExpr>
@@ -74,6 +70,8 @@ Identifier -> [a-zA-Z_][a-zA-Z0-9_]*
 future
 
 OO
+dynamic memory
+pointers
 
 namespace {}
 using namespace <Identifier>

@@ -10,7 +10,7 @@
 // Block -> { (<Stmt> | <Decl>)* }
 struct Block : Absyn {
   std::vector<std::shared_ptr<Stmt>> stmts;
-  std::vector<std::shared_ptr<Decl>> stmts;
+  std::vector<std::shared_ptr<Decl>> decls;
 
   Block(int l, int c) : Absyn(l, c) {}
 };
